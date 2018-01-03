@@ -1,6 +1,5 @@
 var latitude;
 var longitude;
-var map_key=config.google_map_key;
 
 latitude = 55.780134;
 longitude = 49.189847;
@@ -17,14 +16,57 @@ function initMap() {
   });
 }
 
-var defaultBounds = new google.maps.LatLngBounds(
-  new google.maps.LatLng(-33.8902, 151.1759),
-  new google.maps.LatLng(-33.8474, 151.2631));
+var placeSearch, autocomplete;
 
-var input = document.getElementById('searchTextField');
-var options = {
-  bounds: defaultBounds,
-  types: ['establishment']
-};
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+      {types: ['geocode']});
 
-autocomplete = new google.maps.places.Autocomplete(input, options);
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener('place_changed', fillInAddress);
+}
+
+
+function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+
+  for (var component in componentForm) {
+    document.getElementById(component).value = '';
+    document.getElementById(component).disabled = false;
+  }
+
+  // Get each component of the address from the place details
+  // and fill the corresponding field on the form.
+  for (var i = 0; i < place.address_components.length; i++) {
+    var addressType = place.address_components[i].types[0];
+    if (componentForm[addressType]) {
+      var val = place.address_components[i][componentForm[addressType]];
+      document.getElementById(addressType).value = val;
+    }
+  }
+}
+
+
+// Bias the autocomplete object to the user's geographical location,
+// as supplied by the browser's 'navigator.geolocation' object.
+function geolocate() {
+  if (navigator.geolocation) {
+    console.log("my position: "+navigator.geolocation);
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var circle = new google.maps.Circle({
+        center: geolocation,
+        radius: position.coords.accuracy
+      });
+      autocomplete.setBounds(circle.getBounds());
+    });
+  }
+}
