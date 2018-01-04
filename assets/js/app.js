@@ -1,24 +1,47 @@
 var latitude;
 var longitude;
 
-latitude = 55.780134;
-longitude = 49.189847;
-
+var map, infoWindow;
 function initMap() {
-  var enteredLocation = {lat: latitude, lng: longitude};
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: enteredLocation
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 37.680, lng: -122.2},
+    zoom: 10
   });
-  var marker = new google.maps.Marker({
-    position: enteredLocation,
-    map: map
-  });
+  infoWindow = new google.maps.InfoWindow;
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('You are here');
+      infoWindow.open(map);
+      map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+  infoWindow.open(map);
 }
 
 var placeSearch, autocomplete;
 
 function initAutocomplete() {
+  console.log("In autocomplete");
   // Create the autocomplete object, restricting the search to geographical
   // location types.
   autocomplete = new google.maps.places.Autocomplete(
@@ -54,19 +77,20 @@ function fillInAddress() {
 
 // Bias the autocomplete object to the user's geographical location,
 // as supplied by the browser's 'navigator.geolocation' object.
-function geolocate() {
-  if (navigator.geolocation) {
-    console.log("my position: "+navigator.geolocation);
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var geolocation = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      var circle = new google.maps.Circle({
-        center: geolocation,
-        radius: position.coords.accuracy
-      });
-      autocomplete.setBounds(circle.getBounds());
-    });
-  }
-}
+
+// function geolocate() {
+//   if (navigator.geolocation) {
+//     console.log("my position: "+navigator.geolocation);
+//     navigator.geolocation.getCurrentPosition(function(position) {
+//       var geolocation = {
+//         lat: position.coords.latitude,
+//         lng: position.coords.longitude
+//       };
+//       // var circle = new google.maps.Circle({
+//       //   center: geolocation,
+//       //   radius: position.coords.accuracy
+//       // });
+//       // autocomplete.setBounds(circle.getBounds());
+//     });
+//   }
+// }
