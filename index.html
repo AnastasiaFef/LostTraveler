@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Lost Traveller</title>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+	<script
+	src="https://code.jquery.com/jquery-3.2.1.min.js"
+	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	crossorigin="anonymous"></script>
+	<script src="assets/js/app.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg&libraries=places&callback=initAutocomplete" async defer></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/3/slate/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link rel="icon" type="image/ico" href="assets/images/sign.ico">
+</head>
+<body>
+	<div class=container>
+		<div class="app-name jumbotron">
+			<h1>Lost Traveler</h1>
+		</div>
+		<div class="container-fluid">
+			<input id="pac-input" class="controls" type="text" placeholder="Enter your location"> 
+			<div id="map"></div>
+
+			<div id="infowindow-content">
+		      <span id="place-name"  class="title"></span><br>
+		      Place ID <span id="place-id"></span><br>
+		      <span id="place-address"></span>
+		    </div>
+
+		</div>
+	</div>
+
+
+
