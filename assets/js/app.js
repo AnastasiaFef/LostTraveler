@@ -101,6 +101,29 @@ $(document).on('click','#search_button', function(){
           map: map,
           title: 'Hello World!'
         })
+         $.ajax({
+         url: 'https://api.uber.com/v1.2/estimates/price',
+         headers: {
+           'Authorization': 'Bearer KA.eyJ2ZXJzaW9uIjoyLCJpZCI6InUrQ294MS9tUkcyZXEwZkFERXdrZnc9PSIsImV4cGlyZXNfYXQiOjE1MTYyNTc4NDQsInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.beOa_9qarmZzh1ouo27s-5m7A9lk89EKQhDrBEcrLSk',
+           'Accept-Language': 'en_US',
+           'Access-Control-Allow-Origin': '*'
+         },
+         dataType: 'json',
+         data: {
+           start_latitude: latitude,
+           start_longitude: longitude,
+           end_latitude: lat,
+           end_longitude: lng,
+         }
+         }).done(function(data) {
+             console.log(data);
+             console.log(data.estimate);
+             var price_x= data.prices[7].estimate;
+             console.log('price for uber X: '+price_x);
+             var duration= data.prices[7].duration;
+             console.log('duration is '+duration / 60 +' min');
+        });
+
     }
   });
 })
