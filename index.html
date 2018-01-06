@@ -1,33 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Lost Traveller</title>
+
+	<title>Lost Traveler</title>
+
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
-    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-	<script
-	src="https://code.jquery.com/jquery-3.2.1.min.js"
-	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-	crossorigin="anonymous"></script>
-	<script src="assets/js/app.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg&callback=initMap"></script> <!-- MAP -->
+
+<!--Reset CSS-->
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+
+<!-- bootstrap-->
+
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ 	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- bootwatch -->
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.2/darkly/bootstrap.min.css">
+
+<!--css-->
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+ 
+<!--Map-->
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg&callback=initMap"></script>
+	
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg&libraries=places&callback=initAutocomplete" async defer></script>
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/3/slate/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link rel="icon" type="image/ico" href="assets/images/sign.ico">
+
 </head>
+
+
 <body>
-	<div class=container>
-		<div class="app-name jumbotron">
-			<h1>Lost Traveler</h1>
+
+<!-- logo -->
+<div class=container>
+	<div class="app-name jumbotron">
+		
+		<div class="row col-sm">
+			<img src="./assets/images/lostT.png"><iframe src="https://giphy.com/embed/SE7HhwTv83biM" width="25%" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 		</div>
-		<div class="container-fluid">
+
+		</div>
+	</div>
+		
+
+</div>
+		
+	
+
+	<div class="container-fluid">
 			<div class="input-group"> <span class="input-group-btn"> <button id="go" class="btn btn-secondary" type="button">Go!</button> </span> <input id='autocomplete' type="text" class="form-control" placeholder="Search for your airport..." aria-label="Search for..."> </div> 
 			<div id="map"></div>
 		</div>
-	</div>
+		<br>
 
 
+  
+  <form>
+    <div class="form-group">
+      <label for="sel1">Hours before next flight:</label>
+      <select class="custom-select" id="sel1">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4+</option>
+      </select>
+      
+    </div>
+  </form>
 
+		
+
+
+</div>
+
+
+<!-- gif -->
+
+<!-- results -->
+
+<!-- footer -->
+
+<footer>
+      <div class="container">
+        <p class="text-muted">LostTraveler &#169; Copyright 2018 Anastasia Fefilova, Robert Sala, Gina Assar</p>
+      </div>
+    </footer>
+
+<!-- Jquery -->
+
+ 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+ <!-- Javascript -->
+	<script src="assets/js/app.js"></script>
+
+
+</body>
+</html>
