@@ -101,7 +101,6 @@ $(document).on('click','#search_button', function(){
           map: map,
           title: 'Hello World!'
         })
-
          $.ajax({
          url: 'https://api.uber.com/v1.2/estimates/price',
          headers: {
