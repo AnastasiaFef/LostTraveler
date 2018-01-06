@@ -85,13 +85,13 @@ $(document).on('click','#search_button', function(){
   $.ajax({
     url: queryURL,
     method: "GET"
-  }).done(function(responce) {
-    console.log(responce);
-    console.log(responce.status)
+  }).done(function(response) {
+    console.log(response);
+    console.log(response.status)
     console.log("==================================");
 
     // Loop through and set markers on map
-    for (var i = 0; i < responce.results.length; i++) {
+    for (var i = 0; i < response.results.length; i++) {
         var lat = response.results[i].geometry.location.lat;
         var lng = response.results[i].geometry.location.lng;
         var name = response.results[i].name;
