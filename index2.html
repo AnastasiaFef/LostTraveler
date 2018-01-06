@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Lost Traveler</title>
+
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+<!--Reset CSS-->
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+
+<!-- bootstrap-->
+
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ 	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- bootwatch -->
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootswatch/4.0.0-beta.2/darkly/bootstrap.min.css">
+
+<!--css-->
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+ 
+<!--Map-->
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg&callback=initMap"></script>
+	
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg&libraries=places&callback=initAutocomplete" async defer></script>
+
+
+</head>
+
+
+<body>
+
+<!-- logo -->
+<div class=container>
+	<div class="app-name jumbotron">
+		<div class="row">
+			<img src="./assets/images/lostT.png"><iframe src="https://giphy.com/embed/SE7HhwTv83biM" width="25%" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+		</div>
+		
+
+	</div>
+		
+	
+
+	<div class="container-fluid">
+			<div class="input-group"> <span class="input-group-btn"> <button id="go" class="btn btn-secondary" type="button">Go!</button> </span> <input id='autocomplete' type="text" class="form-control" placeholder="Search for your airport..." aria-label="Search for..."> </div> 
+			<div id="map"></div>
+		</div>
+
+
+  
+  <form>
+    <div class="form-group">
+      <label for="sel1">Hours before next flight:</label>
+      <select class="custom-select" id="sel1">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4+</option>
+      </select>
+      
+    </div>
+  </form>
+
+		
+
+
+</div>
+
+
+<!-- gif -->
+
+<!-- results -->
+
+<!-- footer -->
+<div id="footer">
+	</div>
+	<p id="footer">LostTraveler &#169; Copyright 2018 Anastasia Fefilova, Robert Sala, Gina Assar</p>
+
+
+
+<!-- Jquery -->
+
+ 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+ <!-- Javascript -->
+	<script src="assets/js/app.js"></script>
+
+
+</body>
+</html>
