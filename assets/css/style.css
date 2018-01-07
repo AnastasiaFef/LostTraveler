@@ -1,7 +1,12 @@
 body {
 	font-size: 12px;
+    background-image: url("../images/travel-background-passport-stamps.jpg");
 }
-
+.wrap{
+    background-image: url("../images/cream_dust.png");
+    margin: 15px;
+    padding: 15px;
+}
 #map {
 	height: 400px;
 	width: 100%;
@@ -11,6 +16,7 @@ body {
 }
 .jumbotron{
 	padding: 20px;
+    margin: 15px;
 }
 h1{
 	margin: 0;
@@ -19,18 +25,15 @@ h1{
 #go{
 	color: black;
 }
-
-
 html {
   position: relative;
   min-height: 100%;
 }
 body {
-  /* Margin bottom by footer height */object-position: 
-  margin-bottom: 60px;
+  margin-bottom: 75px;
 }
 footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
@@ -75,7 +78,7 @@ h1{
     outline: none;
     padding: 0 11px 0 13px;
     text-overflow: ellipsis;
-    width: 400px;
+    width: 80%;
 }
 .price{
     width: 10%;
@@ -89,4 +92,25 @@ h1{
 }
 button{
     color: black;
+}
+.gif.lost_man{
+    width: 101px;
+    height: 144px;
+}
+.gif.lost_plane{
+    width: 175px;
+    height: 120px;
+}
+.header{
+    margin:auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+#places_go_here{
+    margin: 15px;
+}
+.distance,
+.duration,
+.price{
+    width: 33%;
 }

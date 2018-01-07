@@ -84,15 +84,15 @@ $(document).on('click','#search_button', function(){
 
   getPlaces(queryURL);
 
-  console.log("I'm done")
-  $('#trigger').trigger("click")
+  // console.log("I'm done")
+  // $('#trigger').trigger("click")
 
-  $('#trigger').on("click",function(){ 
-    console.log("in triggered function")
+  // $('#trigger').on("click",function(){ 
+  //   console.log("in triggered function")
     for(var j=0; j<table_lines_gplaces.length; j++){
       $("#table_gplaces").append(table_lines_gplaces[j]);
     }
-  })
+  // })
   
   //Add "Get Uber estimates" button
   $("#for_uber_button").prepend($("<button>").attr("id","show_uber").attr('class','btn').append("Get Uber estimates"));
@@ -142,14 +142,10 @@ function getUberData(uberApiUrl, lat, lng, i){
        console.log('distance is '+distance / 60 +' mi');
 
        // adding info to the table
-      var tr_uber=("<tr>"+"<td nowrap>"+distance+"</td>"+"<td nowrap>"+duration+"</td>"+"<td nowrap>"+price_x+"</td>"+"</tr>");
+      var tr_uber=("<tr>"+"<td nowrap>"+distance+' mi'+"</td>"+"<td nowrap>"+duration+' min'+"</td>"+"<td nowrap>"+price_x+"</td>"+"</tr>");
       console.log("tr_uber: ", tr_uber);
 
       table_lines_uber.push(tr_uber)
-
-        // console.log("old one",table_lines_gplaces[i]);
-        // table_lines_gplaces[i]=table_lines_gplaces[i]+tr_uber;
-        // console.log("new one",table_lines_gplaces[i]);
 
     });
 }
@@ -175,36 +171,26 @@ function set_markers(response){
         scaledSize: new google.maps.Size(24, 18) // pixels
       }
     })
-
     var tr_places=("<tr>"+"<td nowrap>"+name+"</td>"+"<td nowrap>"+address+"</td>"+"<td nowrap>"+price_level+"</td>"+"<td nowrap>"+rating+"</td>"+"</tr>");
 
     table_lines_gplaces.push(tr_places);
     console.log(table_lines_gplaces);
 
     var uberApiUrl = 'https://api.uber.com/v1.2/estimates/price';
-
     getUberData(uberApiUrl, lat, lng, i);
   }
 }
 
 $(document).on('click','#show_uber',function(){
-  $('#places_go_here').attr('class','col-md-7 col-sm-7 col-xs-7 col-lg-7');
-  var header_uber=$('<tr>').html("<th> Distance </th> <th> Duration </th> <th> Uber X Price </th>")
+  $('#table_gplaces').attr('class','col-md-8 col-sm-8 col-xs-8 col-lg-8');
+  var header_uber=$('<tr>').html("<th class='distance'> Distance </th> <th class='duration'> Duration </th> <th class='price'> Price </th>")
   var table_uber=$('<table>').attr('id','table_uber').append(header_uber);
-  $('#table').append($('<div>').attr('class','col-md-5 col-sm-5 col-xs-5 col-lg-5').append(table_uber));
+  $('#table').append($('<div>').attr('class','col-md-4 col-sm-4 col-xs-4 col-lg-4').append(table_uber));
   
   for(let x=0;x<table_lines_uber.length;x++){
     $('#table_uber').append(table_lines_uber[x]);
   }
 })
-
-
-
-
-
-
-
-
 
 
 
