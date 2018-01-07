@@ -2,6 +2,10 @@ var latitude;
 var longitude;
 var map;
 var radius = 3 //in kilometers
+// var hidden= $("<div>").append("#trigger");
+$("body").append($("<div>").attr("id","trigger"));
+var table_lines_gplaces = [];
+var table_lines_uber = [];
 
 function initAutocomplete() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -73,82 +77,126 @@ function initAutocomplete() {
   });
 }
 
-
 $(document).on('click','#search_button', function(){
   var type = $('#search_button').data("type");
-  console.log(type)
-  console.log(latitude)
-  console.log(longitude)
-
   var queryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+latitude+','+longitude+'&radius='+radius*1000+'&type='+type+'&key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg'
   console.log(queryURL);
+
+  getPlaces(queryURL);
+
+  console.log("I'm done")
+  $('#trigger').trigger("click")
+
+  $('#trigger').on("click",function(){ 
+    console.log("in triggered function")
+    for(var j=0; j<table_lines_gplaces.length; j++){
+      $("#table_gplaces").append(table_lines_gplaces[j]);
+    }
+  })
+  
+  //Add "Get Uber estimates" button
+  $("#for_uber_button").prepend($("<button>").attr("id","show_uber").attr('class','btn').append("Get Uber estimates"));
+
+});
+
+function getPlaces(queryURL){
   $.ajax({
     url: queryURL,
-    method: "GET"
+    method: "GET",
   }).done(function(response) {
     console.log(response);
     console.log(response.status)
     console.log("==================================");
-
-    // Loop through and set markers on map
-    for (var i = 0; i < response.results.length; i++) {
-        var lat = response.results[i].geometry.location.lat;
-        var lng = response.results[i].geometry.location.lng;
-        var name = response.results[i].name;
-        // var is_open= response.results[i].opening_hours.open_now;
-        var price_level = response.results[i].price_level;
-        var rating = response.results[i].rating;
-        var address= response.results[i].vicinity;
-        console.log("name: "+name+', is_open: '+', price_level: '+price_level+', rating: '+ rating+', address: '+address)
-
-        var marker = new google.maps.Marker({
-          position: {lat: lat, lng: lng},
-          map: map,
-          title: 'Yay',
-          icon: {
-            url: response.results[i].icon,
-            scaledSize: new google.maps.Size(24, 18) // pixels
-          }
-        })
-        
-         $.ajax({
-         url: 'https://api.uber.com/v1.2/estimates/price',
-         headers: {
-           'Authorization': 'Bearer KA.eyJ2ZXJzaW9uIjoyLCJpZCI6InUrQ294MS9tUkcyZXEwZkFERXdrZnc9PSIsImV4cGlyZXNfYXQiOjE1MTYyNTc4NDQsInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.beOa_9qarmZzh1ouo27s-5m7A9lk89EKQhDrBEcrLSk',
-           'Accept-Language': 'en_US',
-           'Access-Control-Allow-Origin': '*'
-         },
-         dataType: 'json',
-         data: {
-           start_latitude: latitude,
-           start_longitude: longitude,
-           end_latitude: lat,
-           end_longitude: lng,
-         }
-         }).done(function(data) {
-             console.log(data);
-             console.log(data.estimate);
-             var price_x= data.prices[7].estimate;
-             console.log('price for uber X: '+price_x);
-             var duration= data.prices[7].duration;
-             console.log('duration is '+duration / 60 +' min');
-        });
-
-
-        // adding info to the table
-        var tr=$("<tr>");
-        var td_name=$("<td>").append(name);
-        var td_address=$("<td>").append(address);
-        var td_price_level=$("<td>").append(price_level);
-        var td_rating=$("<td>").append(rating);
-        tr.append(td_name).append(td_address).append(td_price_level).append(td_rating)
-        $("#table").append(tr);
-
+    set_markers(response);
+    console.log("Am I done")
+    for(let j=0; j<table_lines_gplaces.length; j++){
+      $("#table_gplaces").append(table_lines_gplaces[j]);
     }
-  });
+  })
+}
+
+function getUberData(uberApiUrl, lat, lng, i){
+    $.ajax({
+       url: uberApiUrl,
+       headers: {
+         'Authorization': 'Bearer KA.eyJ2ZXJzaW9uIjoyLCJpZCI6InUrQ294MS9tUkcyZXEwZkFERXdrZnc9PSIsImV4cGlyZXNfYXQiOjE1MTYyNTc4NDQsInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.beOa_9qarmZzh1ouo27s-5m7A9lk89EKQhDrBEcrLSk',
+         'Accept-Language': 'en_US',
+         'Access-Control-Allow-Origin': '*'
+       },
+       dataType: 'json',
+       data: {
+         start_latitude: latitude,
+         start_longitude: longitude,
+         end_latitude: lat,
+         end_longitude: lng,
+       }
+      }).done(function(data) {
+       console.log("88888888888888888888888");
+       console.log(data);
+       console.log(data.estimate);
+       var price_x= data.prices[7].estimate;
+       console.log('price for uber X: '+price_x);
+       var duration= data.prices[7].duration;
+       console.log('duration is '+duration / 60 +' min');
+       var distance = data.prices[7].distance;
+       console.log('distance is '+distance / 60 +' mi');
+
+       // adding info to the table
+      var tr_uber=("<tr>"+"<td nowrap>"+distance+"</td>"+"<td nowrap>"+duration+"</td>"+"<td nowrap>"+price_x+"</td>"+"</tr>");
+      console.log("tr_uber: ", tr_uber);
+
+      table_lines_uber.push(tr_uber)
+
+        // console.log("old one",table_lines_gplaces[i]);
+        // table_lines_gplaces[i]=table_lines_gplaces[i]+tr_uber;
+        // console.log("new one",table_lines_gplaces[i]);
+
+    });
+}
+
+function set_markers(response){
+  // Loop through and set markers on map
+  for (let i = 0; i < response.results.length; i++) { // Always use let in for loop
+    var lat = response.results[i].geometry.location.lat;
+    var lng = response.results[i].geometry.location.lng;
+    var name = response.results[i].name;
+    // var is_open= response.results[i].opening_hours.open_now;
+    var price_level = response.results[i].price_level;
+    var rating = response.results[i].rating;
+    var address= response.results[i].vicinity;
+    console.log("name: "+name+', is_open: '+', price_level: '+price_level+', rating: '+ rating+', address: '+address)
+
+    var marker = new google.maps.Marker({
+      position: {lat: lat, lng: lng},
+      map: map,
+      title: 'Yay',
+      icon: {
+        url: response.results[i].icon,
+        scaledSize: new google.maps.Size(24, 18) // pixels
+      }
+    })
+
+    var tr_places=("<tr>"+"<td nowrap>"+name+"</td>"+"<td nowrap>"+address+"</td>"+"<td nowrap>"+price_level+"</td>"+"<td nowrap>"+rating+"</td>"+"</tr>");
+
+    table_lines_gplaces.push(tr_places);
+    console.log(table_lines_gplaces);
+
+    var uberApiUrl = 'https://api.uber.com/v1.2/estimates/price';
+
+    getUberData(uberApiUrl, lat, lng, i);
+  }
+}
+
+$(document).on('click','#show_uber',function(){
+  $('#places_go_here').attr('class','col-md-7 col-sm-7 col-xs-7 col-lg-7');
+  var header_uber=$('<tr>').html("<th> Distance </th> <th> Duration </th> <th> Uber X Price </th>")
+  var table_uber=$('<table>').attr('id','table_uber').append(header_uber);
+  $('#table').append($('<div>').attr('class','col-md-5 col-sm-5 col-xs-5 col-lg-5').append(table_uber));
+  
+  for(let x=0;x<table_lines_uber.length;x++){
+    $('#table_uber').append(table_lines_uber[x]);
+  }
 })
-
-
 
 
 
