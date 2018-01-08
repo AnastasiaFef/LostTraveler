@@ -9,10 +9,11 @@
 }
 .container-fluid{
 	padding: 0;
+  clear: both;
 }
 .jumbotron{
 	padding: 20px;
-    margin: 15px;
+  margin: 15px;
 }
 h1{
 	margin: 0;
@@ -27,22 +28,24 @@ html {
 }
 body {
   margin-bottom: 50px;
-    font-size: 12px;
-    background-image: url("../images/travel-background-passport-stamps.jpg");
+  font-size: 12px;
+  background-image: url("../images/travel-background-passport-stamps.jpg");
 }
 footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 35px;
+  height: 40px;
   background: rgba(255, 254, 247, 0.85);
 }
 form {
 	text-align:center;
 }
-.text-muted{
+p,
+h5{
   text-align: center;
-  margin-top: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 #map {
   height: 400px;
@@ -59,27 +62,27 @@ h1{
   text-align: center;
 }
 #infowindow-content {
-    display: none;
+  display: none;
 }
 #map #infowindow-content {
-    display: inline;
+  display: inline;
 }
 .controls {
-    background-color: #fff;
-    border-radius: 2px;
-    border: 1px solid transparent;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box;
-    font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
-    height: 29px;
-    margin-left: 17px;
-    margin-top: 10px;
-    outline: none;
-    padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-    width: 80%;
+  background-color: #fff;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  height: 29px;
+  margin-left: 17px;
+  margin-top: 10px;
+  outline: none;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 80%;
 }
 .price,
 .rating{
@@ -92,44 +95,58 @@ h1{
   width: 33%;
 }
 button{
-    color: black;
+  color: black;
 }
 .gif.lost_man{
-    width: 101px;
-    height: 144px;
+  width: 101px;
+  height: 144px;
 }
 .gif.lost_plane{
-    width: 175px;
-    height: 120px;
+  width: 175px;
+  height: 120px;
 }
 .header{
-    margin:auto;
-    margin-top: 15px;
-    margin-bottom: 15px;
+  margin:auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 #table{
-    margin: 15px;
+  margin: 5px;
 }
 .distance,
 .duration,
 .price{
-    width: 33%;
+  width: 33%;
 }
 .distance,
 .duration{
-    padding-right: 10px;
+  padding-right: 10px;
 }
 #table_uber{
-    margin-left: 10px;
+  margin-left: 10px;
 }
 .col-md-2.col-sm-2.col-xs-2.col-lg-2,
 .col-md-9.col-sm-9.col-xs-9.col-lg-9{
-    padding: 0;
+  padding: 0;
 }
 .error{
-    color: red;
-    font-size: 11px;
+  color: red;
+  font-size: 11px;
 }
 list{
   list-style-type: none;
+}
+#for_uber_button{
+  margin-top: 5px;
+}
+#for_uber_button,
+.uber_not_ready{
+  position: absolute;
+  right: 60px;
+}
+.uber_not_ready{
+  bottom: -4px;
+}
+#for_uber_button{
+  top: 0;
 }
