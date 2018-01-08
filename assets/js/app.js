@@ -77,8 +77,8 @@ function initAutocomplete() {
   });
 }
 
-$(document).on('click','#search_button', function(){
-  var type = $('#search_button').data("type");
+$(document).on('click','.search_button', function(){
+  var type = $('.search_button').data("type");
   var queryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+latitude+','+longitude+'&radius='+radius*1000+'&type='+type+'&key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg'
 
   //// no Uber button
@@ -96,26 +96,11 @@ $(document).on('click','#search_button', function(){
   // $('#trigger').on("click",function(){ 
   //   console.log("in triggered function")
 
-//--------------------SHOW 1 TABLE:
-$('#table_gplaces').attr('class','col-md-12 col-sm-12 col-xs-12 col-lg-12');
-  var header_gplaces=$('<tr>').html("<th class='name'> Name </th> <th class='address'> Address </th> <th class='price_level'> Price </th> <th class='rating'> Rating </th>");
-  var table_gplaces=$('<table>').attr('id','table_gplaces').append(header_gplaces);
-  $('#table').append(table_gplaces);
-  
-  for(let x=0;x<table_lines_gplaces.length;x++){
-    $('#table_gplaces').append(table_lines_gplaces[x]);
-  }
-//--------------------Adding places table
-
-
-
   for(let j=0; j<table_lines_gplaces.length; j++){
     $("#table_gplaces").append(table_lines_gplaces[j]);
   }
   // })
   
-  //Add "Get Uber estimates" button
-  $("#for_uber_button").append($("<button>").attr("id","show_uber").attr('class','btn').append("Get Uber estimates"));
 
 });
 
@@ -126,12 +111,32 @@ function getPlaces(queryURL){
   }).done(function(response) {
     console.log(response);
     console.log(response.status)
+    if(response.status==="INVALID_REQUEST"){
+      console.log('Address is not correct');
+      $(".error.place_error").text("Address is not correct");
+      setTimeout(hideError, 5000);
+      return;
+    }
+    if(response.status==="ZERO_RESULTS"){
+      console.log('No search results');
+      $(".error.place_error").text("We couldn't find anything, edid your search parameters");
+      setTimeout(hideError, 5000);
+      return;
+    }
     console.log("==================================");
     set_markers(response);
     console.log("Am I done")
     for(let j=0; j<table_lines_gplaces.length; j++){
       $("#table_gplaces").append(table_lines_gplaces[j]);
     }
+    
+/////// ADD 1 TABLE func ref
+
+    displaySingleTable();
+
+
+    //Add "Get Uber estimates" button
+    $("#for_uber_button").append($("<button>").attr("id","show_uber").attr('class','btn').append("Get Uber estimates"));
   })
 }
 
@@ -155,7 +160,7 @@ function getUberData(uberApiUrl, lat, lng, i){
         console.log(data);
         var indexUberX = data.prices.length - 1;
         uberX=false;
-        // var i=0;
+        var i=0;
         while(uberX){
           if(data.prices[i].display_name === "uberX"){
             indexUberX = i;
@@ -164,10 +169,6 @@ function getUberData(uberApiUrl, lat, lng, i){
           i++;
         }
         console.log(indexUberX + " indexUberX")
-
-
-
-       // getUberXIndex(data);
        console.log("indexUberX "+indexUberX) 
        var price_x= data.prices[indexUberX-1].estimate;
        console.log('price for uber X: '+price_x);
@@ -218,7 +219,7 @@ function set_markers(response){
 $(document).on('click','#show_uber',function showUberData(){
   if(table_lines_uber.length<20){
     console.log('Please give us a few seconds and try again later');
-    $("#for_uber_button").append("<div>").attr("class",'error').text("Please try again later");
+    $(".error.uber_not_ready").text("Please try again later");
     setTimeout(hideError, 5000);
     return;
   }
@@ -236,4 +237,14 @@ function hideError() {
     $(".error").hide();
 };
 
+function displaySingleTable(){
+  $('#table_gplaces').attr('class','col-md-12 col-sm-12 col-xs-12 col-lg-12');
+  var header_gplaces=$('<tr>').html("<th class='name'> Name </th> <th class='address'> Address </th> <th class='price_level'> Price </th> <th class='rating'> Rating </th>");
+  var table_gplaces=$('<table>').attr('id','table_gplaces').append(header_gplaces);
+  $('#table').append(table_gplaces);
+  
+  for(let x=0;x<table_lines_gplaces.length;x++){
+    $('#table_gplaces').append(table_lines_gplaces[x]);
+  }
+}
 

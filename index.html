@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Lost Traveler</title>
-
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
  	<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
@@ -21,7 +20,6 @@
 
 	<!-- tab icon -->
 	<link rel="icon" type="image/ico" href="assets/images/sign.ico">
-
 </head>
 <body>
 
@@ -59,25 +57,39 @@
 			  </select>
 			</div>
 		</form> -->
-		<div class=box>
-		    <button id='search_button' data-type="restaurant" class="btn">Click me!!! For restaurants around</button>
-						
-			<div id='for_uber_button'></div>
 
+		<div class=box>
+			<list>
+				<li>
+				    <button type="button" class="btn btn-primary search_button" data-type="restaurant">Restaurants</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="art_gallery">Art Gallery</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="atm">ATM</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="bar">Bar</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="cafe">Cafe</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="museum">Museum</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="car_rental">Car Rental</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="park">Park</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="casino">Casino</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="shopping_mall">Shopping Mall</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="spa">Spa</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="zoo">Zoo</button>
+				</li>
+				<li class="error place_error"></li>
+			</list>
+		
+			<list>
+				<li id='for_uber_button'></li>
+				<li class="error uber_not_ready"></li>
+			</list>
+			<!-- results -->
 		    <div class=container-fluid>
 				<div id=table>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<!-- results -->
-
 	<footer>
-	    <div class="container">
-	        <p class="text-muted">LostTraveler &#169; Copyright 2018 Anastasia Fefilova, Robert Sala, Gina Assar</p>
-	    </div>
+        <p class="text-muted">LostTraveler &#169; Copyright 2018 Anastasia Fefilova, Robert Sala, Gina Assar</p>
     </footer>
-
 </body>
 </html>
