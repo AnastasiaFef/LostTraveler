@@ -5,9 +5,6 @@ var radius = 3 //in kilometers
 var type;
 var address;
 
-
-
-// var hidden= $("<div>").append("#trigger");
 $("body").append($("<div>").attr("id","trigger"));
 var table_lines_gplaces = [];
 var table_lines_uber = [];
@@ -49,7 +46,6 @@ function initAutocomplete() {
     var bounds = new google.maps.LatLngBounds();
     places.forEach(function(place) {
       if (!place.geometry) {
-        console.log("Returned place contains no geometry");
         return;
       }
       var icon = {
@@ -86,35 +82,22 @@ function initAutocomplete() {
 
 $(document).on('click','.search_button', function(){
   type = $(this).data("type");
+  var input_number=$(".num").val().trim();
+  if(input_number){
+    radius = input_number;
+  }
   var queryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+latitude+','+longitude+'&radius='+radius*1000+'&type='+type+'&key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg'
-  
-  // address = $('#pac-input').data();
-  console.log('0000000000 address 000000000', address)
-  //// no Uber button
   table_lines_gplaces = [];
   table_lines_uber = [];
   $("#table").html('');
   $(".error").html('');
 
-    //// Clear inputfield, display entered address before results or error message
-
   //// REMOVE OLD PINS ON MAP
 
-
-
   getPlaces(queryURL);
-
-  // $('#trigger').trigger("click")
-
-  // $('#trigger').on("click",function(){ 
-  //   console.log("in triggered function")
-
   for(let j=0; j<table_lines_gplaces.length; j++){
     $("#table_gplaces").append(table_lines_gplaces[j]);
   }
-  // })
-  
-
 });
 
 function getPlaces(queryURL){
@@ -122,10 +105,8 @@ function getPlaces(queryURL){
     url: queryURL,
     method: "GET",
   }).done(function(response) {
-    console.log(response);
     $('#search_address').html('');
     $('#for_uber_button').html('');
-
     if(response.status==="INVALID_REQUEST"){
       $(".error.place_error").text("Address is not correct");
       setTimeout(hideError, 5000);
@@ -188,7 +169,6 @@ function set_markers(response){
     var name = response.results[i].name;
     // var is_open= response.results[i].opening_hours.open_now;
     var price_lev = response.results[i].price_level;
-    console.log(price_lev, ' ---- price_lev')
     var price_level='';
     if(!price_lev){
       price_level = "&#45";
@@ -198,11 +178,26 @@ function set_markers(response){
         price_level += "&#36";
       }
     }
-    console.log(price_level, ' ---- price_level')
 
     var rating = response.results[i].rating;
-    var address= response.results[i].vicinity;
+    rating=Math.round(rating,0)
+    var stars='';
+    if(rating){
+      for(let s=0; s<rating; s++){
+        stars += "<span class='fa fa-star checked'></span>";
+      }
+      if(rating<5){
+        var empty_stars=5-rating;
+        for(let e=0;e<empty_stars;e++){
+          stars+= '<span class=\"fa fa-star\"></span>';
+        }
+      }
+    }
+    else{
+      stars="&#45";
+    }
 
+    var address= response.results[i].vicinity;
     var marker = new google.maps.Marker({
       position: {lat: lat, lng: lng},
       map: map,
@@ -212,8 +207,8 @@ function set_markers(response){
         scaledSize: new google.maps.Size(24, 18) // pixels
       }
     })
-    var tr_places=("<tr>"+"<td nowrap>"+name+"</td>"+"<td nowrap>"+address+"</td>"+"<td nowrap>"+price_level+"</td>"+"<td nowrap>"+rating+"</td>"+"</tr>");
 
+    var tr_places=("<tr>"+"<td nowrap>"+name+"</td>"+"<td nowrap>"+address+"</td>"+"<td nowrap>"+price_level+"</td>"+"<td nowrap>"+stars+"</td>"+"</tr>");
     table_lines_gplaces.push(tr_places);
     var uberApiUrl = 'https://api.uber.com/v1.2/estimates/price';
     getUberData(uberApiUrl, lat, lng, i);
@@ -250,13 +245,10 @@ function hideError() {
 };
 
 function displaySingleTable(){
-  // /////////ADD SEARCH ADDRESS HERE
-  var search_result_message=$('<h5>').attr('class','text-primary').html("Showing "+type+"s around "+address);
+  var search_result_message=$('<h5>').attr('class','text-primary').attr('id','address').html("Showing "+type+"s around "+address);
   $('#search_address').html(search_result_message);
+  $('#address').append('<span class=text-muted> clear search results</span>');
   $('#pac-input').val('');
-
-
-
   $("#for_uber_button").html($("<button>").attr("id","show_uber").attr('class','btn btn-primary').append("Get Uber estimates"));
   $('#table').html('');
   var header_gplaces=$('<tr>').html("<th class='name'> Name </th> <th class='address'> Address </th> <th class='price_level'> Price </th> <th class='rating'> Rating </th>");
@@ -268,3 +260,10 @@ function displaySingleTable(){
 }
 
 $(document).on('click','#hide_uber', displaySingleTable)
+
+$(document).on('click','.text-muted',function(){
+  $('#search_address').html('');
+  $('#for_uber_button').html('');
+  $('#table_gplaces').html('');
+  $('#table_uber').html('');
+})
