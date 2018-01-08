@@ -80,22 +80,42 @@ function initAutocomplete() {
 $(document).on('click','#search_button', function(){
   var type = $('#search_button').data("type");
   var queryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+latitude+','+longitude+'&radius='+radius*1000+'&type='+type+'&key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg'
-  console.log(queryURL);
+
+  //// no Uber button
+  table_lines_gplaces = [];
+  table_lines_uber = [];
+  $("#table_gplaces").clear;
+  $("#table_uber").html('');
+
+  console.log("latlng of new search is ", latitude, ",", longitude);
 
   getPlaces(queryURL);
 
-  // console.log("I'm done")
   // $('#trigger').trigger("click")
 
   // $('#trigger').on("click",function(){ 
   //   console.log("in triggered function")
-    for(var j=0; j<table_lines_gplaces.length; j++){
-      $("#table_gplaces").append(table_lines_gplaces[j]);
-    }
+
+//--------------------SHOW 1 TABLE:
+$('#table_gplaces').attr('class','col-md-12 col-sm-12 col-xs-12 col-lg-12');
+  var header_gplaces=$('<tr>').html("<th class='name'> Name </th> <th class='address'> Address </th> <th class='price_level'> Price </th> <th class='rating'> Rating </th>");
+  var table_gplaces=$('<table>').attr('id','table_gplaces').append(header_gplaces);
+  $('#table').append(table_gplaces);
+  
+  for(let x=0;x<table_lines_gplaces.length;x++){
+    $('#table_gplaces').append(table_lines_gplaces[x]);
+  }
+//--------------------Adding places table
+
+
+
+  for(let j=0; j<table_lines_gplaces.length; j++){
+    $("#table_gplaces").append(table_lines_gplaces[j]);
+  }
   // })
   
   //Add "Get Uber estimates" button
-  $("#for_uber_button").prepend($("<button>").attr("id","show_uber").attr('class','btn').append("Get Uber estimates"));
+  $("#for_uber_button").append($("<button>").attr("id","show_uber").attr('class','btn').append("Get Uber estimates"));
 
 });
 
@@ -117,36 +137,50 @@ function getPlaces(queryURL){
 
 function getUberData(uberApiUrl, lat, lng, i){
     $.ajax({
-       url: uberApiUrl,
-       headers: {
-         'Authorization': 'Bearer KA.eyJ2ZXJzaW9uIjoyLCJpZCI6InUrQ294MS9tUkcyZXEwZkFERXdrZnc9PSIsImV4cGlyZXNfYXQiOjE1MTYyNTc4NDQsInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.beOa_9qarmZzh1ouo27s-5m7A9lk89EKQhDrBEcrLSk',
-         'Accept-Language': 'en_US',
-         'Access-Control-Allow-Origin': '*'
-       },
-       dataType: 'json',
-       data: {
-         start_latitude: latitude,
-         start_longitude: longitude,
-         end_latitude: lat,
-         end_longitude: lng,
-       }
+      url: uberApiUrl,
+      headers: {
+        'Authorization': 'Bearer KA.eyJ2ZXJzaW9uIjoyLCJpZCI6InUrQ294MS9tUkcyZXEwZkFERXdrZnc9PSIsImV4cGlyZXNfYXQiOjE1MTYyNTc4NDQsInBpcGVsaW5lX2tleV9pZCI6Ik1RPT0iLCJwaXBlbGluZV9pZCI6MX0.beOa_9qarmZzh1ouo27s-5m7A9lk89EKQhDrBEcrLSk',
+        'Accept-Language': 'en_US',
+        'Access-Control-Allow-Origin': '*'
+      },
+        dataType: 'json',
+        data: {
+          start_latitude: latitude,
+          start_longitude: longitude,
+          end_latitude: lat,
+          end_longitude: lng,
+        }
       }).done(function(data) {
-       console.log("88888888888888888888888");
-       console.log(data);
-       console.log(data.estimate);
-       var price_x= data.prices[7].estimate;
+        console.log("88888888888888888888888");
+        console.log(data);
+        var indexUberX = data.prices.length - 1;
+        uberX=false;
+        // var i=0;
+        while(uberX){
+          if(data.prices[i].display_name === "uberX"){
+            indexUberX = i;
+            uberX=true;
+          }
+          i++;
+        }
+        console.log(indexUberX + " indexUberX")
+
+
+
+       // getUberXIndex(data);
+       console.log("indexUberX "+indexUberX) 
+       var price_x= data.prices[indexUberX-1].estimate;
        console.log('price for uber X: '+price_x);
-       var duration= data.prices[7].duration;
-       console.log('duration is '+duration / 60 +' min');
-       var distance = data.prices[7].distance;
-       console.log('distance is '+distance / 60 +' mi');
+       var duration= data.prices[indexUberX].duration / 60;
+       console.log('duration is '+duration+' min');
+       var distance = data.prices[indexUberX].distance;
+       console.log('distance is '+distance +' mi');
 
        // adding info to the table
       var tr_uber=("<tr>"+"<td nowrap>"+distance+' mi'+"</td>"+"<td nowrap>"+duration+' min'+"</td>"+"<td nowrap>"+price_x+"</td>"+"</tr>");
       console.log("tr_uber: ", tr_uber);
 
       table_lines_uber.push(tr_uber)
-
     });
 }
 
@@ -181,16 +215,25 @@ function set_markers(response){
   }
 }
 
-$(document).on('click','#show_uber',function(){
-  $('#table_gplaces').attr('class','col-md-8 col-sm-8 col-xs-8 col-lg-8');
+$(document).on('click','#show_uber',function showUberData(){
+  if(table_lines_uber.length<20){
+    console.log('Please give us a few seconds and try again later');
+    $("#for_uber_button").append("<div>").attr("class",'error').text("Please try again later");
+    setTimeout(hideError, 5000);
+    return;
+  }
+  $('#table_gplaces').attr('class','col-md-9 col-sm-9 col-xs-9 col-lg-9');
   var header_uber=$('<tr>').html("<th class='distance'> Distance </th> <th class='duration'> Duration </th> <th class='price'> Price </th>")
   var table_uber=$('<table>').attr('id','table_uber').append(header_uber);
-  $('#table').append($('<div>').attr('class','col-md-4 col-sm-4 col-xs-4 col-lg-4').append(table_uber));
+  $('#table').append($('<div>').attr('class','col-md-2 col-sm-2 col-xs-2 col-lg-2').append(table_uber));
   
   for(let x=0;x<table_lines_uber.length;x++){
     $('#table_uber').append(table_lines_uber[x]);
   }
 })
 
+function hideError() {
+    $(".error").hide();
+};
 
 
