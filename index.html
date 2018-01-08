@@ -28,7 +28,7 @@
 		<div class="row box">
 			<div class="header">
 				<img class='gif lost_man' src="./assets/images/lost_man.gif">
-				<img src="./assets/images/lostT.png">
+				<img src="./assets/images/lt_color.png">
 				<img class='gif lost_plane' src="./assets/images/lost_plane.gif">
 				<!-- <iframe src="https://giphy.com/embed/SE7HhwTv83biM" width="25%" frameBorder="0" class="giphy-embed" allowFullScreen></iframe> -->
 			</div>
@@ -77,14 +77,20 @@
 				<li class="error place_error"></li>
 			</list>
 		
-			<list>
-				<li id='for_uber_button'></li>
-				<li class="error uber_not_ready"></li>
-			</list>
-			<!-- results -->
-		    <div class=container-fluid>
-				<div id=table>
+
+			<div class=row>
+				<div id='search_address' class='col-md-9 col-sm-9 col-xs-9 col-lg-9'>
+	
 				</div>
+				<list id='uber_buttons' class='col-md-3 col-sm-3 col-xs-3 col-lg-3'>
+					<li id='for_uber_button'></li>
+					<li class="error uber_not_ready"></li>
+				</list>
+			</div>
+
+
+			<!-- results -->
+		    <div id=table class=container-fluid>
 			</div>
 		</div>
 	</div>
