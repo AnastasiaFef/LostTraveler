@@ -41,7 +41,7 @@ footer {
 form {
 	text-align:center;
 }
-p,
+.text-muted,
 h5{
   text-align: center;
   margin-top: 15px;
@@ -149,4 +149,15 @@ list{
 }
 #for_uber_button{
   top: 0;
+}
+.checked {
+    color: #78c2ad;
+}
+.text-muted{
+  font-size: 11px;
+}
+.form-control.num{
+  height: 25px;
+  width: 65px;
+  margin: 0 3px 0 3px;
 }
