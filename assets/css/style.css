@@ -81,15 +81,15 @@ h1{
     text-overflow: ellipsis;
     width: 80%;
 }
-.price{
-    width: 7%;
-}
+.price,
 .rating{
-    width: 7%;
-}.name{
-    width: 33%;
-}.address{
-    width: 53%;
+  width: 7%;
+}
+.name{
+  width: 23%;
+}
+.address{
+  width: 33%;
 }
 button{
     color: black;

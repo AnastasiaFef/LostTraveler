@@ -84,8 +84,12 @@ $(document).on('click','.search_button', function(){
   //// no Uber button
   table_lines_gplaces = [];
   table_lines_uber = [];
-  $("#table_gplaces").clear;
-  $("#table_uber").html('');
+  $("#table").html('');
+
+    //// Clear inputfield, display entered address before results or error message
+
+  //// REMOVE OLD PINS ON MAP
+
 
   console.log("latlng of new search is ", latitude, ",", longitude);
 
@@ -112,7 +116,7 @@ function getPlaces(queryURL){
     console.log(response);
     console.log(response.status)
     if(response.status==="INVALID_REQUEST"){
-      console.log('Address is not correct');
+      console.log('Please enter correct address');
       $(".error.place_error").text("Address is not correct");
       setTimeout(hideError, 5000);
       return;
@@ -125,19 +129,14 @@ function getPlaces(queryURL){
     }
     console.log("==================================");
     set_markers(response);
-    console.log("Am I done")
     for(let j=0; j<table_lines_gplaces.length; j++){
       $("#table_gplaces").append(table_lines_gplaces[j]);
     }
-    
-/////// ADD 1 TABLE func ref
 
     displaySingleTable();
 
 
-    //Add "Get Uber estimates" button
-    $("#for_uber_button").append($("<button>").attr("id","show_uber").attr('class','btn').append("Get Uber estimates"));
-  })
+      })
 }
 
 function getUberData(uberApiUrl, lat, lng, i){
@@ -223,6 +222,7 @@ $(document).on('click','#show_uber',function showUberData(){
     setTimeout(hideError, 5000);
     return;
   }
+  $("#for_uber_button").html($("<button>").attr("id","hide_uber").attr('class','btn btn-secondary').attr('type',"button").append("Hide Uber data"));
   $('#table_gplaces').attr('class','col-md-9 col-sm-9 col-xs-9 col-lg-9');
   var header_uber=$('<tr>').html("<th class='distance'> Distance </th> <th class='duration'> Duration </th> <th class='price'> Price </th>")
   var table_uber=$('<table>').attr('id','table_uber').append(header_uber);
@@ -234,17 +234,23 @@ $(document).on('click','#show_uber',function showUberData(){
 })
 
 function hideError() {
-    $(".error").hide();
+    $(".error").html('');
 };
 
 function displaySingleTable(){
+  // $("#for_uber_button").html($("<button>").attr("id","hide_uber").attr('class','btn btn-secondary').attr('type',"button").append("Hide Uber data"));
+
+  //Add "Get Uber estimates" button
+  $("#for_uber_button").html($("<button>").attr("id","show_uber").attr('class','btn btn-secondary').append("Get Uber estimates"));
+
+
   $('#table_gplaces').attr('class','col-md-12 col-sm-12 col-xs-12 col-lg-12');
   var header_gplaces=$('<tr>').html("<th class='name'> Name </th> <th class='address'> Address </th> <th class='price_level'> Price </th> <th class='rating'> Rating </th>");
   var table_gplaces=$('<table>').attr('id','table_gplaces').append(header_gplaces);
   $('#table').append(table_gplaces);
-  
   for(let x=0;x<table_lines_gplaces.length;x++){
     $('#table_gplaces').append(table_lines_gplaces[x]);
   }
 }
 
+$(document).on('click','#hide_uber', displaySingleTable)
