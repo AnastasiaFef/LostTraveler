@@ -4,6 +4,10 @@ var map;
 var radius = 3 //in kilometers
 var type;
 var address;
+var markers = [];
+var bounds;
+
+
 
 $("body").append($("<div>").attr("id","trigger"));
 var table_lines_gplaces = [];
@@ -26,24 +30,20 @@ function initAutocomplete() {
     searchBox.setBounds(map.getBounds());
   });
 
-  var markers = [];
+  markers = [];
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
   searchBox.addListener('places_changed', function() {
     var places = searchBox.getPlaces();
-
     if (places.length == 0) {
       return;
     }
+    
+    clearAllPins();
 
-    // Clear out the old markers.
-    markers.forEach(function(marker) {
-      marker.setMap(null);
-    });
     markers = [];
-
     // For each place, get the icon, name and location.
-    var bounds = new google.maps.LatLngBounds();
+    bounds = new google.maps.LatLngBounds();
     places.forEach(function(place) {
       if (!place.geometry) {
         return;
@@ -69,6 +69,8 @@ function initAutocomplete() {
         position: place.geometry.location
       }));
 
+      console.log(markers , '<<<<<<<<<<MARKERS')
+
       if (place.geometry.viewport) {
         // Only geocodes have viewport.
         bounds.union(place.geometry.viewport);
@@ -93,6 +95,8 @@ $(document).on('click','.search_button', function(){
   $(".error").html('');
 
   //// REMOVE OLD PINS ON MAP
+  clearAllPins();
+
 
   getPlaces(queryURL);
   for(let j=0; j<table_lines_gplaces.length; j++){
@@ -179,6 +183,21 @@ function set_markers(response){
       }
     }
 
+    icon= {
+        url: response.results[i].icon,
+        scaledSize: new google.maps.Size(24, 18) // pixels
+      }    
+
+    markers.push(new google.maps.Marker({
+      map: map,
+      position: response.results[i].geometry.location,
+      icon: icon
+    }));
+
+    console.log(markers, 'MARKERS')
+
+    bounds.extend(response.results[i].geometry.location)
+
     var rating = response.results[i].rating;
     rating=Math.round(rating,0)
     var stars='';
@@ -198,21 +217,17 @@ function set_markers(response){
     }
 
     var address= response.results[i].vicinity;
-    var marker = new google.maps.Marker({
-      position: {lat: lat, lng: lng},
-      map: map,
-      title: 'Yay',
-      icon: {
-        url: response.results[i].icon,
-        scaledSize: new google.maps.Size(24, 18) // pixels
-      }
-    })
+
+    for(let m=1;m<markers.length;m++){
+      var marker = new google.maps.Marker(markers[i]);
+    }
 
     var tr_places=("<tr>"+"<td nowrap>"+name+"</td>"+"<td nowrap>"+address+"</td>"+"<td nowrap>"+price_level+"</td>"+"<td nowrap>"+stars+"</td>"+"</tr>");
     table_lines_gplaces.push(tr_places);
     var uberApiUrl = 'https://api.uber.com/v1.2/estimates/price';
     getUberData(uberApiUrl, lat, lng, i);
   }
+  map.fitBounds(bounds);
 }
 
 $(document).on('click','#show_uber',function showUberData(){
@@ -238,6 +253,8 @@ $(document).on('click','#show_uber',function showUberData(){
   for(let x=0;x<table_lines_uber.length;x++){
     $('#table_uber').append(table_lines_uber[x]);
   }
+  map.fitBounds(bounds);
+
 })
 
 function hideError() {
@@ -261,9 +278,18 @@ function displaySingleTable(){
 
 $(document).on('click','#hide_uber', displaySingleTable)
 
-$(document).on('click','.text-muted',function(){
+$(document).on('click','.text-muted',function clearSearchResults(){
   $('#search_address').html('');
   $('#for_uber_button').html('');
   $('#table_gplaces').html('');
   $('#table_uber').html('');
+  clearAllPins();
 })
+
+function clearAllPins(){
+  // Clear out the old markers.
+    for(let m=1;m<markers.length;m++){
+      markers[m].setMap(null);
+    }
+    marker=[];
+}
