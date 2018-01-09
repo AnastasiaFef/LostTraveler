@@ -7,8 +7,6 @@ var address;
 var markers = [];
 var bounds;
 
-
-
 $("body").append($("<div>").attr("id","trigger"));
 var table_lines_gplaces = [];
 var table_lines_uber = [];
@@ -66,7 +64,7 @@ function initAutocomplete() {
         map: map,
         icon: icon,
         title: place.name,
-        position: place.geometry.location
+        position: place.geometry.location,
       }));
 
       console.log(markers , '<<<<<<<<<<MARKERS')
@@ -83,20 +81,26 @@ function initAutocomplete() {
 }
 
 $(document).on('click','.search_button', function(){
-  type = $(this).data("type");
-  var input_number=$(".num").val().trim();
-  if(input_number){
-    radius = input_number;
-  }
-  var queryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+latitude+','+longitude+'&radius='+radius*1000+'&type='+type+'&key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg'
   table_lines_gplaces = [];
   table_lines_uber = [];
   $("#table").html('');
   $(".error").html('');
 
-  //// REMOVE OLD PINS ON MAP
   clearAllPins();
 
+  var input_number=$(".num").val().trim();
+  if(input_number){
+    radius = input_number;
+  }
+
+  ////distance validattion
+  if(radius<1){
+    $(".error.place_error").text("Please enter valid distance");
+    setTimeout(hideError, 5000);
+    return;
+  }
+  type = $(this).data("type");
+  var queryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+latitude+','+longitude+'&radius='+radius*1000+'&type='+type+'&key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg'
 
   getPlaces(queryURL);
   for(let j=0; j<table_lines_gplaces.length; j++){
@@ -121,7 +125,7 @@ function getPlaces(queryURL){
       setTimeout(hideError, 5000);
       return;
     }
-    set_markers(response);
+    setMarkers(response);
     for(let j=0; j<table_lines_gplaces.length; j++){
       $("#table_gplaces").append(table_lines_gplaces[j]);
     }
@@ -145,6 +149,13 @@ function getUberData(uberApiUrl, lat, lng, i){
       end_longitude: lng,
     }
   }).done(function(data) {
+    console.log('UBER: ',data);
+    if(data.prices.length<1){
+      $("#for_uber_button").html('');
+      $(".error.uber_not_ready").text("No Uber in that area");
+      setTimeout(hideError, 5000);
+      return;
+    }
     var indexUberX = data.prices.length - 1;
     uberX=false;
     var i=0;
@@ -158,15 +169,14 @@ function getUberData(uberApiUrl, lat, lng, i){
     var price_x= data.prices[indexUberX-1].estimate;
     var duration= data.prices[indexUberX].duration / 60;
     var distance = data.prices[indexUberX].distance;
-
-    // adding info to the table
+    // adding Uber data to the table
     var tr_uber=("<tr>"+"<td nowrap>"+distance+' mi'+"</td>"+"<td nowrap>"+duration+' min'+"</td>"+"<td nowrap>"+price_x+"</td>"+"</tr>");
     table_lines_uber.push(tr_uber)
   });
 }
 
-function set_markers(response){
-  // Loop through and set markers on map
+function setMarkers(response){
+  // Loop through GPlaces responce and set markers on map
   for (let i = 0; i < response.results.length; i++) { // Always use let in for loop
     var lat = response.results[i].geometry.location.lat;
     var lng = response.results[i].geometry.location.lng;
@@ -182,22 +192,13 @@ function set_markers(response){
         price_level += "&#36";
       }
     }
-
     icon= {
         url: response.results[i].icon,
         scaledSize: new google.maps.Size(24, 18) // pixels
       }    
-
-    markers.push(new google.maps.Marker({
-      map: map,
-      position: response.results[i].geometry.location,
-      icon: icon
-    }));
-
+    addMarkerWithTimeout(response.results[i].geometry.location, i * 200, icon);
     console.log(markers, 'MARKERS')
-
     bounds.extend(response.results[i].geometry.location)
-
     var rating = response.results[i].rating;
     rating=Math.round(rating,0)
     var stars='';
@@ -215,19 +216,24 @@ function set_markers(response){
     else{
       stars="&#45";
     }
-
     var address= response.results[i].vicinity;
-
-    for(let m=1;m<markers.length;m++){
-      var marker = new google.maps.Marker(markers[i]);
-    }
-
     var tr_places=("<tr>"+"<td nowrap>"+name+"</td>"+"<td nowrap>"+address+"</td>"+"<td nowrap>"+price_level+"</td>"+"<td nowrap>"+stars+"</td>"+"</tr>");
     table_lines_gplaces.push(tr_places);
     var uberApiUrl = 'https://api.uber.com/v1.2/estimates/price';
     getUberData(uberApiUrl, lat, lng, i);
   }
   map.fitBounds(bounds);
+}
+
+function addMarkerWithTimeout(position, timeout, icon) {
+  window.setTimeout(function() {
+    markers.push(new google.maps.Marker({
+      position: position,
+      map: map,
+      icon: icon,
+      animation: google.maps.Animation.DROP
+    }));
+  }, timeout);
 }
 
 $(document).on('click','#show_uber',function showUberData(){
@@ -254,11 +260,10 @@ $(document).on('click','#show_uber',function showUberData(){
     $('#table_uber').append(table_lines_uber[x]);
   }
   map.fitBounds(bounds);
-
 })
 
 function hideError() {
-    $(".error").html('');
+  $(".error").html('');
 };
 
 function displaySingleTable(){
@@ -287,9 +292,8 @@ $(document).on('click','.text-muted',function clearSearchResults(){
 })
 
 function clearAllPins(){
-  // Clear out the old markers.
-    for(let m=1;m<markers.length;m++){
-      markers[m].setMap(null);
-    }
-    marker=[];
+  for(let m=1;m<markers.length;m++){
+    markers[m].setMap(null);
+  }
+  marker=[];
 }

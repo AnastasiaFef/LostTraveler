@@ -161,3 +161,9 @@ list{
   width: 65px;
   margin: 0 3px 0 3px;
 }
+.form-inline{
+  margin-bottom: 5px;
+}
+p{
+  margin: 0;
+}
