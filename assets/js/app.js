@@ -36,9 +36,7 @@ function initAutocomplete() {
     if (places.length == 0) {
       return;
     }
-    
     clearAllPins();
-
     markers = [];
     // For each place, get the icon, name and location.
     bounds = new google.maps.LatLngBounds();
@@ -53,12 +51,9 @@ function initAutocomplete() {
         anchor: new google.maps.Point(17, 34),
         scaledSize: new google.maps.Size(25, 25)
       };
-
       address= place.formatted_address;
-
       longitude = place.geometry.viewport.b.b;
       latitude = place.geometry.viewport.f.b;
-
       // Create a marker for each place.
       markers.push(new google.maps.Marker({
         map: map,
@@ -66,9 +61,6 @@ function initAutocomplete() {
         title: place.name,
         position: place.geometry.location,
       }));
-
-      console.log(markers , '<<<<<<<<<<MARKERS')
-
       if (place.geometry.viewport) {
         // Only geocodes have viewport.
         bounds.union(place.geometry.viewport);
@@ -85,14 +77,13 @@ $(document).on('click','.search_button', function(){
   table_lines_uber = [];
   $("#table").html('');
   $(".error").html('');
-
+  $('.search_button').attr('class','btn btn-primary search_button')
+  $(this).attr('class','btn btn-primary search_button animated flash')
   clearAllPins();
-
   var input_number=$(".num").val().trim();
   if(input_number){
     radius = input_number;
   }
-
   ////distance validattion
   if(radius<1){
     $(".error.place_error").text("Please enter valid distance");
@@ -100,8 +91,7 @@ $(document).on('click','.search_button', function(){
     return;
   }
   type = $(this).data("type");
-  var queryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+latitude+','+longitude+'&radius='+radius*1000+'&type='+type+'&key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg'
-
+  var queryURL = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='+latitude+','+longitude+'&radius='+radius*1000+'&type='+type+'&key=AIzaSyDZFVJF-MiHZ5CyrDPgTYj3ibc5MoTgMZg';
   getPlaces(queryURL);
   for(let j=0; j<table_lines_gplaces.length; j++){
     $("#table_gplaces").append(table_lines_gplaces[j]);
@@ -149,7 +139,6 @@ function getUberData(uberApiUrl, lat, lng, i){
       end_longitude: lng,
     }
   }).done(function(data) {
-    console.log('UBER: ',data);
     if(data.prices.length<1){
       $("#for_uber_button").html('');
       $(".error.uber_not_ready").text("No Uber in that area");
@@ -193,11 +182,10 @@ function setMarkers(response){
       }
     }
     icon= {
-        url: response.results[i].icon,
-        scaledSize: new google.maps.Size(24, 18) // pixels
-      }    
+      url: response.results[i].icon,
+      scaledSize: new google.maps.Size(24, 18) // pixels
+    }    
     addMarkerWithTimeout(response.results[i].geometry.location, i * 200, icon);
-    console.log(markers, 'MARKERS')
     bounds.extend(response.results[i].geometry.location)
     var rating = response.results[i].rating;
     rating=Math.round(rating,0)
@@ -251,7 +239,6 @@ $(document).on('click','#show_uber',function showUberData(){
   for(let x=0;x<table_lines_gplaces.length;x++){
     $('#table_gplaces').append(table_lines_gplaces[x]);
   }
-
   var header_uber=$('<tr>').html("<th class='distance'> Distance </th> <th class='duration'> Duration </th> <th class='price'> Price </th>")
   var table_uber=$('<table>').attr('id','table_uber').append(header_uber);
   $('#table').append($('<div>').attr('class','col-md-2 col-sm-2 col-xs-2 col-lg-2').append(table_uber));
@@ -267,9 +254,9 @@ function hideError() {
 };
 
 function displaySingleTable(){
-  var search_result_message=$('<h5>').attr('class','text-primary').attr('id','address').html("Showing "+type+"s around "+address);
+  var search_result_message=$('<h5>').attr('class','text-success').attr('id','address').html("Showing "+type+"s around "+address);
   $('#search_address').html(search_result_message);
-  $('#address').append('<span class=text-muted> clear search results</span>');
+  $('#address').append('<span class=text-muted> clear search</span>');
   $('#pac-input').val('');
   $("#for_uber_button").html($("<button>").attr("id","show_uber").attr('class','btn btn-primary').append("Get Uber estimates"));
   $('#table').html('');
@@ -283,12 +270,14 @@ function displaySingleTable(){
 
 $(document).on('click','#hide_uber', displaySingleTable)
 
-$(document).on('click','.text-muted',function clearSearchResults(){
+$(document).on('click','.text-muted',function clearSearch(){
   $('#search_address').html('');
   $('#for_uber_button').html('');
   $('#table_gplaces').html('');
   $('#table_uber').html('');
   clearAllPins();
+  longitude = 0;
+  latitude =0;
 })
 
 function clearAllPins(){
