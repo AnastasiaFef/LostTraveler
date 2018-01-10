@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Lost Traveler</title>
-
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
  	<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
@@ -18,19 +17,22 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/minty/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<!-- Font Awesome Icon Library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- animation-css -->
+  	<link rel="stylesheet" type="text/css" href="assets/css/animate.css">
 
 	<!-- tab icon -->
 	<link rel="icon" type="image/ico" href="assets/images/sign.ico">
 
 </head>
 <body>
-
 	<!-- logo -->
 	<div class='wrap'>
 		<div class="row box">
 			<div class="header">
 				<img class='gif lost_man' src="./assets/images/lost_man.gif">
-				<img src="./assets/images/lostT.png">
+				<img src="./assets/images/lt_color.png">
 				<img class='gif lost_plane' src="./assets/images/lost_plane.gif">
 				<!-- <iframe src="https://giphy.com/embed/SE7HhwTv83biM" width="25%" frameBorder="0" class="giphy-embed" allowFullScreen></iframe> -->
 			</div>
@@ -47,51 +49,52 @@
 		    </div>
 		</div>
 		<br>
+		<form class="form-inline">
+		  <div class="form-group">
+		  	<p class=text-info>Search within</p>
+		    <input type="number" class="form-control num" placeholder="3">
+		  	<p class=text-info>km for</p>
+		  </div>
+		</form>
 
-		<!-- <form>
-			<div class="form-group">
-			  <label for="sel1">Hours before next flight:</label>
-			  <select class="custom-select" id="sel1">
-			    <option value="1">1</option>
-			    <option value="2">2</option>
-			    <option value="3">3</option>
-			    <option value="4">4+</option>
-			  </select>
-			</div>
-		</form> -->
 		<div class=box>
-		    <button id='search_button' data-type="restaurant" class="btn">Click me!!! For restaurants around</button>
-						
-			<div id='for_uber_button'></div>
-
-		    <div class=container-fluid>
-				<div id=table>
-					<div id="places_go_here">
-						<table id='table_gplaces' class='col-md-12 col-sm-12 col-xs-12 col-lg-12'>
-							<tr>
-								<th class=name> Name </th>
-								<th class=address> Address </th>
-								<th class=price_level> Price </th>
-								<th class=rating> Rating </th>
-							</tr>
-						</table>
-					</div>
+			<list>
+				<li>
+				    <button type="button" class="btn btn-primary search_button" data-type="restaurant">Restaurants</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="art_gallery">Art Gallery</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="atm">ATM</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="bar">Bar</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="cafe">Cafe</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="museum">Museum</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="car_rental">Car Rental</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="park">Park</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="casino">Casino</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="shopping_mall">Shopping Mall</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="spa">Spa</button>
+				    <button type="button" class="btn btn-primary search_button" data-type="zoo">Zoo</button>
+				</li>
+				<li class="error place_error"></li>
+			</list>
+		
+			<div class=row>
+				<div id='search_address' class='col-md-9 col-sm-9 col-xs-9 col-lg-9'>
 				</div>
+				<list id='uber_buttons' class='col-md-3 col-sm-3 col-xs-3 col-lg-3'>
+					<li id='for_uber_button'></li>
+					<li class="error uber_not_ready"></li>
+				</list>
+			</div>
+
+			<!-- results -->
+		    <div id=table class=container-fluid>
 			</div>
 		</div>
 	</div>
-
-	<!-- gif -->
-
-	<!-- results -->
-
-	<!-- footer -->
-
+		<div class="adbox">
+		<img class='gif ad' src="./assets/images/ad.png">
+	</div>
 	<footer>
-	    <div class="container">
-	        <p class="text-muted">LostTraveler &#169; Copyright 2018 Anastasia Fefilova, Robert Sala, Gina Assar</p>
-	    </div>
+        <p class="text-muted">LostTraveler &#169; Copyright 2018 Anastasia Fefilova, Robert Sala, Gina Assar</p>
     </footer>
-
 </body>
 </html>
