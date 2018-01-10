@@ -19,13 +19,14 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<!-- Font Awesome Icon Library -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- animation-css -->
+  	<link rel="stylesheet" type="text/css" href="assets/css/animate.css">
 
 	<!-- tab icon -->
 	<link rel="icon" type="image/ico" href="assets/images/sign.ico">
 
 </head>
 <body>
-
 	<!-- logo -->
 	<div class='wrap'>
 		<div class="row box">
@@ -48,21 +49,6 @@
 		    </div>
 		</div>
 		<br>
-
-		<!-- <form>
-			<div class="form-group">
-			  <label for="sel1">Hours before next flight:</label>
-			  <select class="custom-select" id="sel1">
-			    <option value="1">1</option>
-			    <option value="2">2</option>
-			    <option value="3">3</option>
-			    <option value="4">4+</option>
-			  </select>
-			</div>
-		</form> -->
-
-
-
 		<form class="form-inline">
 		  <div class="form-group">
 		  	<p class=text-info>Search within</p>
@@ -74,7 +60,7 @@
 		<div class=box>
 			<list>
 				<li>
-				    <button type="button" class="btn btn-primary search_button" data-type="restaurant">Restaurants</button>		
+				    <button type="button" class="btn btn-primary search_button" data-type="restaurant">Restaurants</button>
 				    <button type="button" class="btn btn-primary search_button" data-type="art_gallery">Art Gallery</button>		
 				    <button type="button" class="btn btn-primary search_button" data-type="atm">ATM</button>		
 				    <button type="button" class="btn btn-primary search_button" data-type="bar">Bar</button>		
@@ -90,17 +76,14 @@
 				<li class="error place_error"></li>
 			</list>
 		
-
 			<div class=row>
 				<div id='search_address' class='col-md-9 col-sm-9 col-xs-9 col-lg-9'>
-	
 				</div>
 				<list id='uber_buttons' class='col-md-3 col-sm-3 col-xs-3 col-lg-3'>
 					<li id='for_uber_button'></li>
 					<li class="error uber_not_ready"></li>
 				</list>
 			</div>
-
 
 			<!-- results -->
 		    <div id=table class=container-fluid>
