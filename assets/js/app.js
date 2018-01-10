@@ -289,6 +289,6 @@ function clearAllPins(){
 }
 
 $(document).on('click', '.ad', function(){
-  $('.money').append($("<img>").attr('src','assets/images/giphy_money.gif').attr('class','money_fall'));
+  $('.money').append($("<img>").attr('src','assets/images/giphy_moneyyy.gif').attr('class','money_fall'));
   setTimeout(hideError, 3000);
 })
