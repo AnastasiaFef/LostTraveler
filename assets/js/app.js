@@ -251,6 +251,7 @@ $(document).on('click','#show_uber',function showUberData(){
 
 function hideError() {
   $(".error").html('');
+  $(".money").html('');
 };
 
 function displaySingleTable(){
@@ -286,3 +287,8 @@ function clearAllPins(){
   }
   marker=[];
 }
+
+$(document).on('click', '.ad', function(){
+  $('.money').append($("<img>").attr('src','assets/images/giphy_moneyyy.gif').attr('class','money_fall'));
+  setTimeout(hideError, 3000);
+})
